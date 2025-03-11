@@ -206,7 +206,17 @@ export const StyledSidebarContent = styled.div({
   position: "relative",
   height: "100%",
   width: "100%",
-  overflow: ["auto", "overlay"],
+  overflow: "auto",
+  /**
+   * Ensure that space is reserved for scrollbars, even when they are not
+   * visible. This is necessary to prevent layout shifts when the scrollbars
+   * appear and disappear.
+   *
+   * We utilize both-edges so that things look visually centered and aligned.
+   *
+   * @see https://github.com/streamlit/streamlit/issues/10310
+   */
+  scrollbarGutter: "stable both-edges",
 })
 
 export const RESIZE_HANDLE_WIDTH = "8px"
