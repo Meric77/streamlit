@@ -83,7 +83,7 @@ def send_page_not_found(ctx: ScriptRunContext):
 def navigation(
     pages: Sequence[PageType] | Mapping[SectionHeader, Sequence[PageType]],
     *,
-    position: Literal["sidebar", "hidden"] = "sidebar",
+    position: Literal["sidebar", "hidden", "top"] = "sidebar",
     expanded: bool = False,
 ) -> StreamlitPage:
     """
@@ -128,10 +128,11 @@ def navigation(
         path inferred from its path or filename. To customize these attributes
         for your page, initialize your page with ``st.Page``.
 
-    position : "sidebar" or "hidden"
+    position : "sidebar", "hidden", or "top"
         The position of the navigation menu. If this is ``"sidebar"``
         (default), the navigation widget appears at the top of the sidebar. If
-        this is ``"hidden"``, the navigation widget is not displayed.
+        this is ``"hidden"``, the navigation widget is not displayed. If this
+        is ``"top"``, the navigation appears in the top header of the app.
 
         If there is only one page in ``pages``, the navigation will be hidden
         for any value of ``position``.
@@ -265,7 +266,7 @@ def navigation(
 def _navigation(
     pages: Sequence[PageType] | Mapping[SectionHeader, Sequence[PageType]],
     *,
-    position: Literal["sidebar", "hidden"],
+    position: Literal["sidebar", "hidden", "top"],
     expanded: bool,
 ) -> StreamlitPage:
     if isinstance(pages, Sequence):
@@ -337,6 +338,8 @@ def _navigation(
     msg = ForwardMsg()
     if position == "hidden":
         msg.navigation.position = NavigationProto.Position.HIDDEN
+    elif position == "top":
+        msg.navigation.position = NavigationProto.Position.TOP
     elif config.get_option("client.showSidebarNavigation") is False:
         msg.navigation.position = NavigationProto.Position.HIDDEN
     else:

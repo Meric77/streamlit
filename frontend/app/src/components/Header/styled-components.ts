@@ -15,6 +15,7 @@
  */
 
 import styled from "@emotion/styled"
+import { EmotionTheme } from "@streamlit/lib"
 
 export interface StyledHeaderProps {
   showHeader: boolean
@@ -22,38 +23,44 @@ export interface StyledHeaderProps {
   isStale?: boolean
 }
 
-export const StyledHeader = styled.header<StyledHeaderProps>(
-  ({ showHeader, theme }) => ({
-    position: "fixed",
-    top: theme.spacing.none,
-    left: theme.spacing.none,
-    right: theme.spacing.none,
-    height: theme.sizes.headerHeight,
-    background: theme.colors.bgColor,
-    outline: "none",
-    zIndex: theme.zIndices.header,
-    display: showHeader ? "block" : "none",
-    "@media print": {
-      display: "none",
-    },
-  })
-)
+export const StyledHeader = styled.header<{
+  theme: EmotionTheme
+}>`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors?.bgColor || "white"};
+  min-height: 3.6rem;
+  height: 3.6rem;
+  z-index: 100;
+  pointer-events: auto;
+  position: relative;
+  will-change: transform; /* Hint for browser optimization */
+  transform: translateZ(0); /* Force GPU rendering */
+  /* Define explicit rendering layer - prevents paint issues */
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+`
 
 export const StyledHeaderDecoration = styled.div(({ theme }) => ({
   position: "absolute",
   top: theme.spacing.none,
   right: theme.spacing.none,
   left: theme.spacing.none,
-  height: theme.sizes.headerDecorationHeight,
+  height: `calc(${theme.sizes.headerDecorationHeight} * 0.6)` /* Reduced to 50% of the increased height */,
   backgroundImage: `linear-gradient(90deg, ${theme.colors.red70}, #fffd80)`,
-  zIndex: theme.zIndices.header,
+  zIndex: 50 /* Lowered from theme.zIndices.header to ensure it's below nav elements */,
 }))
 
-export const StyledHeaderToolbar = styled.div(({ theme }) => ({
-  position: "absolute",
-  top: theme.spacing.xl,
-  right: theme.spacing.xl,
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-}))
+export const StyledHeaderToolbar = styled.div<{
+  theme: EmotionTheme
+}>`
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  pointer-events: auto;
+  position: relative;
+  z-index: 101;
+`

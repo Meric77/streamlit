@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import React, { ReactElement, ReactNode } from "react"
+import React, { ReactElement, ReactNode, useContext } from "react"
 
 import { AppContext } from "@streamlit/app/src/components/AppContext"
+import { LibContext } from "@streamlit/lib"
 
 import {
   StyledHeader,
@@ -25,18 +26,31 @@ import {
 } from "./styled-components"
 
 export interface HeaderProps {
-  children: ReactNode
   isStale?: boolean
+  navigation?: ReactNode
+  rightContent?: ReactNode
+  logoComponent?: ReactNode
 }
 
-function Header({ isStale, children }: Readonly<HeaderProps>): ReactElement {
+function Header({
+  isStale,
+  navigation,
+  rightContent,
+  logoComponent,
+}: Readonly<HeaderProps>): ReactElement {
   const { wideMode, embedded, showToolbar, showColoredLine } =
-    React.useContext(AppContext)
+    useContext(AppContext)
+
+  // Get the active theme from LibContext
+  const { activeTheme } = useContext(LibContext)
 
   let showHeader = true
   if (embedded) {
     showHeader = showToolbar || showColoredLine
   }
+
+  const hasContent = navigation || rightContent
+
   return (
     <StyledHeader
       showHeader={showHeader}
@@ -54,9 +68,64 @@ function Header({ isStale, children }: Readonly<HeaderProps>): ReactElement {
           id="stDecoration"
         />
       )}
-      {showToolbar && (
-        <StyledHeaderToolbar className="stAppToolbar" data-testid="stToolbar">
-          {children}
+      {showToolbar && hasContent && (
+        <StyledHeaderToolbar
+          className="stAppToolbar"
+          data-testid="stToolbar"
+          theme={activeTheme.emotion}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: "100%",
+              margin: 0,
+              border: 0,
+            }}
+          >
+            {/* Logo and navigation section */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {/* Logo comes first if provided */}
+              {logoComponent && (
+                <div style={{ marginLeft: "12px", marginRight: "12px" }}>
+                  {logoComponent}
+                </div>
+              )}
+
+              {/* Navigation follows logo */}
+              {navigation && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  {navigation}
+                </div>
+              )}
+            </div>
+
+            {/* Right section */}
+            {rightContent && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "auto",
+                  height: "100%",
+                }}
+              >
+                {rightContent}
+              </div>
+            )}
+          </div>
         </StyledHeaderToolbar>
       )}
     </StyledHeader>
