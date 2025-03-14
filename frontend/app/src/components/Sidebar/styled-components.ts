@@ -146,8 +146,8 @@ export const StyledSidebarNavLink = styled.a<StyledSidebarNavLinkProps>(
       borderRadius: theme.radii.default,
       paddingLeft: theme.spacing.sm,
       paddingRight: theme.spacing.sm,
-      marginLeft: theme.spacing.twoXL,
-      marginRight: theme.spacing.twoXL,
+      marginLeft: theme.spacing.lg,
+      marginRight: theme.spacing.lg,
       marginTop: theme.spacing.threeXS,
       marginBottom: theme.spacing.threeXS,
       lineHeight: theme.lineHeights.menuItem,
@@ -198,8 +198,8 @@ export const StyledSidebarUserContent =
   styled.div<StyledSidebarUserContentProps>(({ hasPageNavAbove, theme }) => ({
     paddingTop: hasPageNavAbove ? theme.spacing.twoXL : 0,
     paddingBottom: theme.sizes.sidebarTopSpace,
-    paddingLeft: theme.spacing.twoXL,
-    paddingRight: theme.spacing.twoXL,
+    paddingLeft: theme.spacing.lg,
+    paddingRight: theme.spacing.lg,
   }))
 
 export const StyledSidebarContent = styled.div({
@@ -217,7 +217,6 @@ export const StyledSidebarContent = styled.div({
    * @see https://github.com/streamlit/streamlit/issues/10310
    */
   scrollbarGutter: "stable both-edges",
-  scrollbarWidth: "thin",
 })
 
 export const RESIZE_HANDLE_WIDTH = "8px"
@@ -241,7 +240,9 @@ export const StyledSidebarHeaderContainer = styled.div(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "start",
-  padding: theme.spacing.twoXL,
+  paddingBottom: theme.spacing.twoXL,
+  paddingLeft: theme.spacing.lg,
+  paddingRight: theme.spacing.lg,
   // Adjust top padding based on the header decoration height
   paddingTop: `calc(${theme.spacing.twoXL} - ${theme.sizes.headerDecorationHeight})`,
 }))
@@ -280,8 +281,11 @@ export const StyledLogo = styled.img<StyledLogoProps>(
     verticalAlign: "middle",
     ...(sidebarWidth && {
       // Control max width of logo so sidebar collapse button always shows (issue #8707)
-      // L & R padding (twoXL) + R margin (sm) + collapse button (2.25rem)
-      maxWidth: `calc(${sidebarWidth}px - 2 * ${theme.spacing.twoXL} - ${theme.spacing.sm} - 2.25rem)`,
+      // L & R padding (lg) + scrollbarGutter on both sides (2 * 8px) + R margin (sm) + collapse button (2.25rem)
+      //
+      // Note that 8px for scrollbarGutter is an estimate, since the actual
+      // value changes depending on the browser and OS.
+      maxWidth: `calc(${sidebarWidth}px - 2 * ${theme.spacing.lg} - 2 * 8px - ${theme.spacing.sm} - 2.25rem)`,
     }),
   })
 )
