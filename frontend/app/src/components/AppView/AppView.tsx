@@ -352,11 +352,7 @@ function AppView(props: AppViewProps): ReactElement {
             hasSidebar={showSidebar}
             isSidebarOpen={showSidebar && !sidebarCollapsed}
             onToggleSidebar={toggleSidebar}
-            logoComponent={
-              navigationPosition === Navigation.Position.TOP &&
-              appLogo &&
-              renderLogo(appLogo)
-            }
+            logoComponent={appLogo && renderLogo(appLogo)}
             navigation={
               navigationPosition === Navigation.Position.TOP &&
               appPages.length > 1 ? (

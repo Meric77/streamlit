@@ -200,6 +200,7 @@ interface State {
   appConfig: AppConfig
   autoReruns: NodeJS.Timeout[]
   inputsDisabled: boolean
+  isMobileViewport: boolean
 }
 
 const INITIAL_SCRIPT_RUN_ID = "<null>"
@@ -316,6 +317,7 @@ export class App extends PureComponent<Props, State> {
       autoReruns: [],
       inputsDisabled: false,
       navigationPosition: Navigation.Position.SIDEBAR,
+      isMobileViewport: false,
     }
 
     this.connectionManager = null
@@ -535,6 +537,10 @@ export class App extends PureComponent<Props, State> {
     this.metricsMgr.enqueue("viewReport")
 
     window.addEventListener("popstate", this.onHistoryChange, false)
+
+    // Initial check and add resize listener
+    this.checkIfMobileViewport()
+    window.addEventListener("resize", this.checkIfMobileViewport)
   }
 
   componentDidUpdate(
@@ -587,6 +593,18 @@ export class App extends PureComponent<Props, State> {
     this.hostCommunicationMgr.closeHostCommunication()
 
     window.removeEventListener("popstate", this.onHistoryChange, false)
+    window.removeEventListener("resize", this.checkIfMobileViewport)
+  }
+
+  // Check if the current viewport is mobile-sized and update state accordingly
+  checkIfMobileViewport = (): void => {
+    // Define the breakpoint for mobile viewport (e.g., 768px)
+    const mobileBreakpoint = 768
+    const isMobile = window.innerWidth < mobileBreakpoint
+
+    if (isMobile !== this.state.isMobileViewport) {
+      this.setState({ isMobileViewport: isMobile })
+    }
   }
 
   /**
@@ -1979,7 +1997,15 @@ export class App extends PureComponent<Props, State> {
       inputsDisabled,
       appPages,
       navSections,
+      isMobileViewport,
+      navigationPosition,
     } = this.state
+
+    // Always use sidebar navigation on mobile, regardless of the server setting
+    const effectiveNavigationPosition = isMobileViewport
+      ? Navigation.Position.SIDEBAR
+      : navigationPosition
+
     const developmentMode = showDevelopmentOptions(
       this.state.isOwner,
       this.state.toolbarMode
@@ -2073,10 +2099,10 @@ export class App extends PureComponent<Props, State> {
                 hideSidebarNav={
                   hideSidebarNav ||
                   hostHideSidebarNav ||
-                  this.state.navigationPosition === Navigation.Position.TOP
+                  effectiveNavigationPosition === Navigation.Position.TOP
                 }
                 expandSidebarNav={expandSidebarNav}
-                navigationPosition={this.state.navigationPosition}
+                navigationPosition={effectiveNavigationPosition}
                 pageLinkBaseUrl={this.state.pageLinkBaseUrl}
                 topRightContent={
                   <>
