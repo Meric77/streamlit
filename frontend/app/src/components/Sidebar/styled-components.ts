@@ -229,10 +229,12 @@ export const StyledResizeHandle = styled.div(({ theme }) => ({
 export const StyledSidebarHeaderContainer = styled.div(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
-  alignItems: "start",
+  alignItems: "center",
   padding: theme.spacing.twoXL,
   // Adjust top padding based on the header decoration height
   paddingTop: `calc(${theme.spacing.twoXL} - ${theme.sizes.headerDecorationHeight})`,
+  height: "3.75rem",
+  background: "honeydew",
 }))
 
 export const StyledLogoLink = styled.a({

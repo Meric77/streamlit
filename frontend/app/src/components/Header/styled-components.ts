@@ -23,34 +23,24 @@ export interface StyledHeaderProps {
   isStale?: boolean
 }
 
-export const StyledHeader = styled.header<{
-  theme: EmotionTheme
-}>`
+export const StyledHeader = styled.header<StyledHeaderProps>`
   display: flex;
+  align-items: center;
   flex-direction: column;
   width: 100%;
   background-color: ${({ theme }) => theme.colors?.bgColor || "white"};
-  min-height: 3.6rem;
-  height: 3.6rem;
+  min-height: 3.75rem;
+  height: 3.75rem;
   z-index: 100;
   pointer-events: auto;
-  position: relative;
+  position: sticky;
+  top: 0;
   will-change: transform; /* Hint for browser optimization */
   transform: translateZ(0); /* Force GPU rendering */
   /* Define explicit rendering layer - prevents paint issues */
   backface-visibility: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
 `
-
-export const StyledHeaderDecoration = styled.div(({ theme }) => ({
-  position: "absolute",
-  top: theme.spacing.none,
-  right: theme.spacing.none,
-  left: theme.spacing.none,
-  height: `calc(${theme.sizes.headerDecorationHeight} * 0.6)` /* Reduced to 50% of the increased height */,
-  backgroundImage: `linear-gradient(90deg, ${theme.colors.red70}, #fffd80)`,
-  zIndex: 50 /* Lowered from theme.zIndices.header to ensure it's below nav elements */,
-}))
 
 export const StyledHeaderToolbar = styled.div<{
   theme: EmotionTheme

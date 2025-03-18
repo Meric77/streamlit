@@ -19,6 +19,42 @@ from streamlit.navigation.page import StreamlitPage
 # Define minimal page functions
 def page_home():
     st.title("Home")
+    st.write(
+        "This is the home page. And I am going to make this text very long so that it overflows the page."
+    )
+
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
+    st.write("This is the home page.")
+    st.title("Home")
     st.write("This is the home page.")
 
 
@@ -48,6 +84,7 @@ contact = StreamlitPage(page_contact, title="Contact", icon="✉️")
 current_page = st.navigation([home, about, contact], position="top")
 st.logo("logo.jpg", size="large")
 
+st.sidebar.image("logo.jpg", width=100)
 
 # Run the current page
 current_page.run()

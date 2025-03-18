@@ -17,16 +17,16 @@
 import React, { ReactElement, ReactNode, useContext } from "react"
 
 import { AppContext } from "@streamlit/app/src/components/AppContext"
-import { LibContext } from "@streamlit/lib"
+import { BaseButton, BaseButtonKind, Icon, LibContext } from "@streamlit/lib"
 
-import {
-  StyledHeader,
-  StyledHeaderDecoration,
-  StyledHeaderToolbar,
-} from "./styled-components"
+import { StyledHeader, StyledHeaderToolbar } from "./styled-components"
+import { ChevronLeft, ChevronRight } from "@emotion-icons/material-outlined"
 
 export interface HeaderProps {
   isStale?: boolean
+  hasSidebar: boolean
+  isSidebarOpen: boolean
+  onToggleSidebar(): void
   navigation?: ReactNode
   rightContent?: ReactNode
   logoComponent?: ReactNode
@@ -34,6 +34,9 @@ export interface HeaderProps {
 
 function Header({
   isStale,
+  hasSidebar,
+  isSidebarOpen,
+  onToggleSidebar,
   navigation,
   rightContent,
   logoComponent,
@@ -61,13 +64,6 @@ function Header({
       className="stAppHeader"
       data-testid="stHeader"
     >
-      {showColoredLine && (
-        <StyledHeaderDecoration
-          className="stDecoration"
-          data-testid="stDecoration"
-          id="stDecoration"
-        />
-      )}
       {showToolbar && hasContent && (
         <StyledHeaderToolbar
           className="stAppToolbar"
@@ -92,9 +88,29 @@ function Header({
               }}
             >
               {/* Logo comes first if provided */}
-              {logoComponent && (
-                <div style={{ marginLeft: "12px", marginRight: "12px" }}>
+              {logoComponent && !isSidebarOpen && (
+                <div
+                  style={{
+                    marginLeft: "12px",
+                  }}
+                >
                   {logoComponent}
+                </div>
+              )}
+
+              {hasSidebar && !isSidebarOpen && (
+                <div
+                  style={{
+                    marginLeft: "12px",
+                    marginRight: "12px",
+                  }}
+                >
+                  <BaseButton
+                    kind={BaseButtonKind.HEADER_NO_PADDING}
+                    onClick={onToggleSidebar}
+                  >
+                    <Icon content={ChevronRight} size="xl" />
+                  </BaseButton>
                 </div>
               )}
 

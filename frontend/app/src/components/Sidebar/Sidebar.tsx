@@ -60,7 +60,6 @@ import SidebarNav from "./SidebarNav"
 
 export interface SidebarProps {
   endpoints: StreamlitEndpoints
-  chevronDownshift: number
   children?: ReactElement
   initialSidebarState?: PageConfig.SidebarState
   hasElements: boolean
@@ -71,6 +70,8 @@ export interface SidebarProps {
   currentPageScriptHash: string
   hideSidebarNav: boolean
   expandSidebarNav: boolean
+  isCollapsed: boolean
+  onToggleCollapse: (collapsed: boolean) => void
 }
 
 const MIN_WIDTH = "336"
@@ -82,25 +83,10 @@ function calculateMaxBreakpoint(value: string): number {
   return parseInt(value, 10) - 0.02
 }
 
-function headerDecorationVisible(): boolean {
-  // Additional safeguard for sidebar height sizing
-  let coloredLineExists = false
-  const headerDecoration = document.getElementById("stDecoration")
-  if (headerDecoration) {
-    const decorationStyles = window.getComputedStyle(headerDecoration)
-    coloredLineExists =
-      decorationStyles.visibility !== "hidden" &&
-      decorationStyles.visibility !== "collapse" &&
-      decorationStyles.display !== "none"
-  }
-  return coloredLineExists
-}
-
 const Sidebar: React.FC<SidebarProps> = ({
   appLogo,
   endpoints,
   appPages,
-  chevronDownshift,
   children,
   initialSidebarState,
   hasElements,
@@ -109,6 +95,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   hideSidebarNav,
   expandSidebarNav,
   navSections,
+  isCollapsed,
+  onToggleCollapse,
 }) => {
   const theme: EmotionTheme = useTheme()
   const mediumBreakpointPx = calculateMaxBreakpoint(theme.breakpoints.md)
@@ -123,25 +111,13 @@ const Sidebar: React.FC<SidebarProps> = ({
     ? window.localStorage.getItem("sidebarWidth")
     : undefined
 
-  const [collapsedSidebar, setCollapsedSidebar] = useState<boolean>(
-    sideBarInitiallyCollapsed
-  )
+  const collapsedSidebar = isCollapsed
   const [sidebarWidth, setSidebarWidth] = useState<string>(
     cachedSidebarWidth || MIN_WIDTH
   )
   const [lastInnerWidth, setLastInnerWidth] = useState<number>(
     window ? window.innerWidth : Infinity
   )
-
-  const { activeTheme } = React.useContext(LibContext)
-
-  useEffect(() => {
-    setCollapsedSidebar(
-      shouldCollapse(initialSidebarState, mediumBreakpointPx)
-    )
-    // hasElements is included because we want to check if the
-    // sidebar should be collapsed when it changes.
-  }, [initialSidebarState, hasElements, mediumBreakpointPx])
 
   // When hovering sidebar header
   const [showSidebarCollapse, setShowSidebarCollapse] =
@@ -181,7 +157,9 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       // Collapse the sidebar if the window was narrowed and is now mobile-sized
       if (innerWidth < lastInnerWidth && innerWidth <= mediumBreakpointPx) {
-        setCollapsedSidebar(true)
+        if (!collapsedSidebar) {
+          onToggleCollapse(true)
+        }
       }
       setLastInnerWidth(innerWidth)
 
@@ -198,7 +176,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           !current.contains(event.target) &&
           innerWidth <= mediumBreakpointPx
         ) {
-          setCollapsedSidebar(true)
+          if (!collapsedSidebar) {
+            onToggleCollapse(true)
+          }
         }
       }
     }
@@ -210,7 +190,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       window.removeEventListener("resize", checkMobileOnResize)
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [lastInnerWidth, mediumBreakpointPx])
+  }, [lastInnerWidth, mediumBreakpointPx, collapsedSidebar, onToggleCollapse])
 
   function resetSidebarWidth(event: any): void {
     // Double clicking on the resize handle resets sidebar to default width
@@ -223,8 +203,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   }
 
   const toggleCollapse = useCallback(() => {
-    setCollapsedSidebar(!collapsedSidebar)
-  }, [collapsedSidebar])
+    onToggleCollapse(!collapsedSidebar)
+  }, [collapsedSidebar, onToggleCollapse])
 
   const handleLogoError = (logoUrl: string, collapsed: boolean): void => {
     // StyledLogo does not retain the e.currentEvent.src like other onerror cases
@@ -280,13 +260,11 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   // Handles checking the URL params
   const isEmbedded = isEmbed() && !isColoredLineDisplayed()
-  // If header decoration visible, move sidebar down so decoration doesn't go below it
-  const sidebarAdjust = !isEmbedded && headerDecorationVisible()
 
   // The tabindex is required to support scrolling by arrow keys.
   return (
     <>
-      <StyledSidebarOpenContainer
+      {/* <StyledSidebarOpenContainer
         chevronDownshift={chevronDownshift}
         data-testid="stSidebarCollapsedControl"
       >
@@ -306,7 +284,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             <Icon content={ChevronRight} size="xl" />
           </BaseButton>
         </StyledOpenSidebarButton>
-      </StyledSidebarOpenContainer>
+      </StyledSidebarOpenContainer> */}
       <Resizable
         className="stSidebar"
         data-testid="stSidebar"
@@ -335,7 +313,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         // Props part of StyledSidebar, but not Resizable component
         // @ts-expect-error
         isCollapsed={collapsedSidebar}
-        adjustTop={sidebarAdjust}
         sidebarWidth={sidebarWidth}
       >
         <StyledSidebarContent

@@ -110,7 +110,6 @@ import StatusWidget from "@streamlit/app/src/components/StatusWidget"
 import MainMenu from "@streamlit/app/src/components/MainMenu"
 import ToolbarActions from "@streamlit/app/src/components/ToolbarActions"
 import DeployButton from "@streamlit/app/src/components/DeployButton"
-import Header from "@streamlit/app/src/components/Header"
 import {
   DialogProps,
   ScriptCompileErrorProps,
@@ -131,10 +130,6 @@ import { SessionEventDispatcher } from "@streamlit/app/src/SessionEventDispatche
 import { UserSettings } from "@streamlit/app/src/components/StreamlitDialog/UserSettings"
 import { MetricsManager } from "@streamlit/app/src/MetricsManager"
 import { StyledApp } from "@streamlit/app/src/styled-components"
-import {
-  StyledLogo,
-  StyledLogoLink,
-} from "@streamlit/app/src/components/Sidebar/styled-components"
 import withScreencast, {
   ScreenCastHOC,
 } from "@streamlit/app/src/hocs/withScreencast/withScreencast"
@@ -1957,38 +1952,6 @@ export class App extends PureComponent<Props, State> {
     }
   }
 
-  /**
-   * Renders the logo component
-   */
-  renderLogo = (appLogo: Logo): ReactElement => {
-    const displayImage = appLogo.iconImage ? appLogo.iconImage : appLogo.image
-    const source = this.endpoints.buildMediaURL(displayImage)
-
-    const logo = (
-      <StyledLogo
-        src={source}
-        size={appLogo.size}
-        alt="Logo"
-        className="stLogo"
-        data-testid="stLogo"
-      />
-    )
-
-    if (appLogo.link) {
-      return (
-        <StyledLogoLink
-          href={appLogo.link}
-          target="_blank"
-          rel="noreferrer"
-          data-testid="stLogoLink"
-        >
-          {logo}
-        </StyledLogoLink>
-      )
-    }
-    return logo
-  }
-
   render(): JSX.Element {
     const {
       allowRunOnSave,
@@ -2091,27 +2054,31 @@ export class App extends PureComponent<Props, State> {
               }
               data-test-connection-state={connectionState}
             >
-              {/* The tabindex below is required for testing. */}
-              <Header
-                navigation={
-                  this.state.navigationPosition === Navigation.Position.TOP &&
-                  appPages.length > 1 ? (
-                    <TopNav
-                      endpoints={this.endpoints}
-                      appPages={appPages}
-                      currentPageScriptHash={currentPageScriptHash}
-                      onPageChange={this.onPageChange}
-                      theme={this.props.theme.activeTheme.emotion}
-                      pageLinkBaseUrl={this.state.pageLinkBaseUrl}
-                    />
-                  ) : null
+              <AppView
+                endpoints={this.endpoints}
+                sendMessageToHost={this.hostCommunicationMgr.sendMessageToHost}
+                elements={elements}
+                scriptRunId={scriptRunId}
+                scriptRunState={scriptRunState}
+                widgetMgr={this.widgetMgr}
+                widgetsDisabled={widgetsDisabled}
+                uploadClient={this.uploadClient}
+                componentRegistry={this.componentRegistry}
+                formsData={this.state.formsData}
+                appLogo={elements.logo}
+                appPages={appPages}
+                navSections={navSections}
+                onPageChange={this.onPageChange}
+                currentPageScriptHash={currentPageScriptHash}
+                hideSidebarNav={
+                  hideSidebarNav ||
+                  hostHideSidebarNav ||
+                  this.state.navigationPosition === Navigation.Position.TOP
                 }
-                logoComponent={
-                  this.state.navigationPosition === Navigation.Position.TOP &&
-                  elements.logo &&
-                  this.renderLogo(elements.logo)
-                }
-                rightContent={
+                expandSidebarNav={expandSidebarNav}
+                navigationPosition={this.state.navigationPosition}
+                pageLinkBaseUrl={this.state.pageLinkBaseUrl}
+                topRightContent={
                   <>
                     <StatusWidget
                       connectionState={connectionState}
@@ -2151,31 +2118,6 @@ export class App extends PureComponent<Props, State> {
                     />
                   </>
                 }
-              />
-
-              <AppView
-                endpoints={this.endpoints}
-                sendMessageToHost={this.hostCommunicationMgr.sendMessageToHost}
-                elements={elements}
-                scriptRunId={scriptRunId}
-                scriptRunState={scriptRunState}
-                widgetMgr={this.widgetMgr}
-                widgetsDisabled={widgetsDisabled}
-                uploadClient={this.uploadClient}
-                componentRegistry={this.componentRegistry}
-                formsData={this.state.formsData}
-                appLogo={elements.logo}
-                appPages={appPages}
-                navSections={navSections}
-                onPageChange={this.onPageChange}
-                currentPageScriptHash={currentPageScriptHash}
-                hideSidebarNav={
-                  hideSidebarNav ||
-                  hostHideSidebarNav ||
-                  this.state.navigationPosition === Navigation.Position.TOP
-                }
-                expandSidebarNav={expandSidebarNav}
-                navigationPosition={this.state.navigationPosition}
               />
               {renderedDialog}
             </StyledApp>
