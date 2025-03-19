@@ -20,7 +20,7 @@ import { AppContext } from "@streamlit/app/src/components/AppContext"
 import { BaseButton, BaseButtonKind, Icon, LibContext } from "@streamlit/lib"
 
 import { StyledHeader, StyledHeaderToolbar } from "./styled-components"
-import { ChevronLeft, ChevronRight } from "@emotion-icons/material-outlined"
+import { ChevronRight } from "@emotion-icons/material-outlined"
 
 export interface HeaderProps {
   isStale?: boolean
