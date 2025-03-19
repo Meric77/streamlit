@@ -105,6 +105,7 @@ export const StyledSidebarNavItems = styled.ul(({ theme }) => {
 export const StyledSidebarNavLinkContainer = styled.div({
   display: "flex",
   flexDirection: "column",
+  cursor: "pointer",
 })
 
 export interface StyledSidebarNavIconProps {

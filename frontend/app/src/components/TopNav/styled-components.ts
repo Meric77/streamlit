@@ -194,7 +194,7 @@ export const StyledNavSection = styled.div({
   position: "relative",
   transition: "background-color 0.2s ease",
   padding: "4px 8px",
-  "&:hover": {
+  "&:active": {
     backgroundColor: "rgba(0, 0, 0, 0.05)",
     borderRadius: "4px",
   },

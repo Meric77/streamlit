@@ -46,7 +46,7 @@ const NavSection = ({ title, pages, handlePageChange }: NavSectionProps) => {
 
   return (
     <StatefulPopover
-      triggerType="hover"
+      triggerType="click"
       placement={PLACEMENT.bottom}
       content={
         <div style={{ padding: "8px 2px" }}>
