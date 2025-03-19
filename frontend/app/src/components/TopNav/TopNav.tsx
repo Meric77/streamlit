@@ -28,6 +28,8 @@ import { EmotionTheme } from "@streamlit/lib"
 import { StreamlitMarkdown } from "@streamlit/lib"
 import { StyledTopNavContainer } from "./styled-components"
 import SidebarNavLink from "../Sidebar/SidebarNavLink"
+import NavSection from "./NavSection"
+import groupBy from "lodash/groupBy"
 
 export interface Props {
   // Endpoint data for the current application
@@ -53,9 +55,12 @@ const TopNav: React.FC<Props> = ({
   onPageChange,
   pageLinkBaseUrl,
 }) => {
+  console.log("appPages", appPages)
+
   // Create a stable callback for the page change handler
   const handlePageChange = useCallback(
     (scriptHash: string) => {
+      console.log("handlePageChange", scriptHash)
       onPageChange(scriptHash)
     },
     [onPageChange]
@@ -82,77 +87,92 @@ const TopNav: React.FC<Props> = ({
     }
   }, [appPages])
 
+  const navSections = useMemo(() => {
+    return groupBy(appPages, "sectionHeader")
+  }, [appPages])
+
+  console.log("navSections", navSections)
+
   return (
-    <StyledTopNavContainer
-      theme={theme}
-      data-testid="stTopNav"
-      className="stTabs"
-      isOverflowing={isOverflowing}
-      tabHeight={theme.sizes.tabHeight}
-    >
-      <div
-        ref={tabListRef}
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center", // Center the tabs
-          overflowX: "auto",
-          scrollbarWidth: "none", // Firefox
-          msOverflowStyle: "none", // IE/Edge
-          padding: "0.5rem 1rem",
-        }}
+    <>
+      <StyledTopNavContainer
+        theme={theme}
+        data-testid="stTopNav"
+        isOverflowing={isOverflowing}
+        tabHeight={theme.sizes.tabHeight}
       >
-        {appPages.map((page, index) => {
-          const pageName = page.pageName || ""
-          const scriptHash = page.pageScriptHash || page.scriptHash || ""
-          const icon = page.icon || ""
-          const isActive = activeTabKey === index
-          const isDisabled = page.disabled || false
+        <div
+          ref={tabListRef}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center", // Center the tabs
+            padding: "0.5rem 1rem",
+          }}
+        >
+          {Object.keys(navSections).length > 1
+            ? Object.keys(navSections).map(section => {
+                return (
+                  <NavSection
+                    handlePageChange={handlePageChange}
+                    title={section}
+                    pages={navSections[section]}
+                  />
+                )
+              })
+            : appPages.map((page, index) => {
+                const pageName = page.pageName || ""
+                const scriptHash = page.pageScriptHash || page.scriptHash || ""
+                const icon = page.icon || ""
+                const isActive = activeTabKey === index
+                const isDisabled = page.disabled || false
 
-          // Create a URL for the page (similar logic to what's in SidebarNav)
-          const pageUrl = pageLinkBaseUrl
-            ? `${pageLinkBaseUrl}/${page.pageName}`
-            : `/${page.pageName}`
+                // Create a URL for the page (similar logic to what's in SidebarNav)
+                const pageUrl = pageLinkBaseUrl
+                  ? `${pageLinkBaseUrl}/${page.pageName}`
+                  : `/${page.pageName}`
 
-          // Generate click handler for this specific navigation item
-          const handleClick = (e: MouseEvent) => {
-            e.preventDefault()
-            if (!isDisabled) {
-              handlePageChange(scriptHash)
-            }
-            return false
-          }
+                // Generate click handler for this specific navigation item
+                const handleClick = (e: MouseEvent) => {
+                  e.preventDefault()
+                  if (!isDisabled) {
+                    handlePageChange(scriptHash)
+                  }
+                  return false
+                }
 
-          return (
-            <div
-              key={scriptHash}
-              data-testid={`nav-${pageName}`}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                opacity: isDisabled ? 0.5 : 1,
-                cursor: isDisabled ? "not-allowed" : "pointer",
-                pointerEvents: isDisabled ? "none" : "auto",
-                marginLeft: "-12px",
-                marginRight: "-12px",
-              }}
-              onMouseEnter={() => setHoverTabIndex(index)}
-              onMouseLeave={() => setHoverTabIndex(null)}
-            >
-              {/* Using SidebarNavLink to maintain UI consistency */}
-              <SidebarNavLink
-                isActive={isActive}
-                pageUrl={pageUrl}
-                icon={icon}
-                onClick={handleClick}
-              >
-                {pageName}
-              </SidebarNavLink>
-            </div>
-          )
-        })}
-      </div>
-    </StyledTopNavContainer>
+                return (
+                  <div
+                    key={scriptHash}
+                    data-testid={`nav-${pageName}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      opacity: isDisabled ? 0.5 : 1,
+                      cursor: isDisabled ? "not-allowed" : "pointer",
+                      pointerEvents: isDisabled ? "none" : "auto",
+                      marginLeft: "-12px",
+                      marginRight: "-12px",
+                    }}
+                    onMouseEnter={() => setHoverTabIndex(index)}
+                    onMouseLeave={() => setHoverTabIndex(null)}
+                  >
+                    {/* Using SidebarNavLink to maintain UI consistency */}
+                    <SidebarNavLink
+                      isActive={isActive}
+                      pageUrl={pageUrl}
+                      icon={icon}
+                      onClick={handleClick}
+                    >
+                      {pageName}
+                    </SidebarNavLink>
+                  </div>
+                )
+              })}
+        </div>
+      </StyledTopNavContainer>
+    </>
   )
 }
 

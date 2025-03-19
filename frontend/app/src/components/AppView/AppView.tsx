@@ -346,6 +346,7 @@ function AppView(props: AppViewProps): ReactElement {
           style={{
             overflow: "hidden",
             width: "100%",
+            height: "100vh",
           }}
         >
           <Header

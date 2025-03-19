@@ -76,12 +76,12 @@ about = StreamlitPage(page_about, title="About", icon="ℹ️")
 contact = StreamlitPage(page_contact, title="Contact", icon="✉️")
 
 # Minimal test of top navigation
-# current_page = st.navigation(
-#     {"Section 1": [home], "Section 2": [about, contact]},
-#     position="top",
-#     expanded=True,
-# )
-current_page = st.navigation([home, about, contact], position="top")
+current_page = st.navigation(
+    {"Section 1": [home], "Section 2": [about, contact]},
+    position="top",
+    expanded=True,
+)
+# current_page = st.navigation([home, about, contact], position="top")
 st.logo("logo.jpg", size="large")
 
 st.sidebar.image("logo.jpg", width=100)
