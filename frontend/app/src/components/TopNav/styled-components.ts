@@ -181,3 +181,21 @@ export const renderTopNavLinks = (
   // Simple placeholder implementation that returns an empty array
   return []
 }
+
+export const StyledNavSection = styled.div({
+  marginLeft: "16px",
+  marginRight: "16px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "100%",
+  height: "100%",
+  cursor: "pointer",
+  position: "relative",
+  transition: "background-color 0.2s ease",
+  padding: "4px 8px",
+  "&:hover": {
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    borderRadius: "4px",
+  },
+})

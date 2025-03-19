@@ -22,6 +22,7 @@ import { MoreVert } from "@emotion-icons/material-outlined"
 import { BaseButton, BaseButtonKind, Icon, LibContext } from "@streamlit/lib"
 import { KeyboardArrowDown } from "@emotion-icons/material-outlined"
 import { isNullOrUndefined } from "@streamlit/utils"
+import { StyledNavSection } from "./styled-components"
 
 interface NavSectionProps {
   handlePageChange: (pageScriptHash: string) => void
@@ -70,20 +71,10 @@ const NavSection = ({ title, pages, handlePageChange }: NavSectionProps) => {
         </div>
       }
     >
-      <div
-        style={{
-          marginLeft: "16px",
-          marginRight: "16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          height: "100%",
-        }}
-      >
+      <StyledNavSection>
         {title}
         <Icon content={KeyboardArrowDown} size="lg" />
-      </div>
+      </StyledNavSection>
     </StatefulPopover>
   )
 }
