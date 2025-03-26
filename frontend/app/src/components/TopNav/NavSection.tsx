@@ -18,55 +18,71 @@ import React from "react"
 import { StatefulPopover } from "baseui/popover"
 import { PLACEMENT } from "baseui/popover"
 import SidebarNavLink from "../Sidebar/SidebarNavLink"
-import { MoreVert } from "@emotion-icons/material-outlined"
-import { BaseButton, BaseButtonKind, Icon, LibContext } from "@streamlit/lib"
+import { Icon } from "@streamlit/lib"
 import { KeyboardArrowDown } from "@emotion-icons/material-outlined"
 import { isNullOrUndefined } from "@streamlit/utils"
 import { StyledNavSection } from "./styled-components"
-
+import { IAppPage } from "@streamlit/protobuf"
+import { StreamlitEndpoints } from "@streamlit/connection"
 interface NavSectionProps {
   handlePageChange: (pageScriptHash: string) => void
   title: string
-  pages: {
-    isActive: boolean
-    pageUrl: string
-    icon: string | undefined | null
-    onClick: (e: React.MouseEvent) => void
-    pageName: string
-    children: string[]
-    isDisabled: boolean
-    pageScriptHash: string
-  }[]
+  sections: IAppPage[][]
+  endpoints: StreamlitEndpoints
+  pageLinkBaseUrl: string
+  currentPageScriptHash: string
 }
 
-const NavSection = ({ title, pages, handlePageChange }: NavSectionProps) => {
-  if (isNullOrUndefined(pages) || pages.length === 0) {
+const NavSection = ({
+  title,
+  sections,
+  handlePageChange,
+  endpoints,
+  pageLinkBaseUrl,
+  currentPageScriptHash,
+}: NavSectionProps) => {
+  if (
+    isNullOrUndefined(sections) ||
+    sections.length === 0 ||
+    sections[0].length === 0
+  ) {
     return null
   }
+
+  const showSections = sections.length > 1
 
   return (
     <StatefulPopover
       triggerType="click"
-      placement={PLACEMENT.bottom}
+      placement={PLACEMENT.bottomLeft}
       content={
-        <div style={{ padding: "8px 2px" }}>
-          {pages.map(item => {
-            const handleClick = (e: React.MouseEvent) => {
-              e.preventDefault()
-              if (!item.isDisabled) {
-                handlePageChange(item.pageScriptHash)
+        <div style={{ padding: "8px 8px" }}>
+          {sections.map(section => {
+            console.log(section)
+            const sectionName = section[0].sectionHeader
+
+            return section.map((item, index) => {
+              const handleClick = (e: React.MouseEvent) => {
+                e.preventDefault()
+                if (item.pageScriptHash) {
+                  handlePageChange(item.pageScriptHash)
+                }
+                return false
               }
-              return false
-            }
-            return (
-              <SidebarNavLink
-                {...item}
-                onClick={handleClick}
-                pageUrl={item.pageUrl}
-              >
-                {item.pageName}
-              </SidebarNavLink>
-            )
+              return (
+                <>
+                  {index === 0 && showSections && <div>{sectionName}</div>}
+                  <SidebarNavLink
+                    {...item}
+                    isActive={currentPageScriptHash === item.pageScriptHash}
+                    onClick={handleClick}
+                    pageUrl={endpoints.buildAppPageURL(pageLinkBaseUrl, item)}
+                  >
+                    {String(item.pageName)}
+                  </SidebarNavLink>
+                </>
+              )
+            })
           })}
         </div>
       }

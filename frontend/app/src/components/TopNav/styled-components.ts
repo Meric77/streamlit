@@ -44,31 +44,12 @@ export interface StyledTopNavContainerProps {
   tabHeight?: string | number
 }
 
-export const StyledTopNavContainer = styled.div<StyledTopNavContainerProps>(
-  ({ theme, isOverflowing, tabHeight }) => ({
-    position: "relative",
-    zIndex: 90,
-    flexShrink: 0,
-    width: "100%",
-    overflow: "visible !important", // Ensure the tab highlight is visible
-    backgroundColor: theme.colors.bgColor,
-
-    // Add gradient for overflowing tabs if needed
-    "&::after": isOverflowing
-      ? {
-          content: '""',
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          right: 0,
-          width: theme.spacing.lg,
-          background: `linear-gradient(to right, ${theme.colors.transparent}, ${theme.colors.bgColor})`,
-          zIndex: 1,
-          pointerEvents: "none",
-        }
-      : {},
-  })
-)
+export const StyledOverflowContainer = styled.div({
+  display: "flex",
+  width: "100%",
+  maxWidth: "100%",
+  flexShrink: 1,
+})
 
 export const StyledTopNavItems = styled.div`
   display: flex;
@@ -170,26 +151,12 @@ export const StyledTopNavSectionSeparator = styled.div<{
   pointer-events: none; /* Don't capture events */
 `
 
-export const renderTopNavLinks = (
-  endpoints: string[],
-  appPages: string[],
-  navSections: Record<string, string>,
-  currentPageScriptHash: string,
-  onPageChange: (page: string, evt: React.MouseEvent) => void,
-  theme: EmotionTheme
-): JSX.Element[] => {
-  // Simple placeholder implementation that returns an empty array
-  return []
-}
-
 export const StyledNavSection = styled.div({
-  marginLeft: "16px",
-  marginRight: "16px",
+  marginLeft: "8px",
+  marginRight: "8px",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
   width: "100%",
-  height: "100%",
   cursor: "pointer",
   position: "relative",
   transition: "background-color 0.2s ease",

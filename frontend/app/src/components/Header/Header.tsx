@@ -15,10 +15,8 @@
  */
 
 import React, { ReactElement, ReactNode, useContext } from "react"
-
 import { AppContext } from "@streamlit/app/src/components/AppContext"
 import { BaseButton, BaseButtonKind, Icon, LibContext } from "@streamlit/lib"
-
 import { StyledHeader, StyledHeaderToolbar } from "./styled-components"
 import { ChevronRight } from "@emotion-icons/material-outlined"
 
@@ -32,7 +30,7 @@ export interface HeaderProps {
   logoComponent?: ReactNode
 }
 
-function Header({
+const Header = ({
   isStale,
   hasSidebar,
   isSidebarOpen,
@@ -40,26 +38,19 @@ function Header({
   navigation,
   rightContent,
   logoComponent,
-}: Readonly<HeaderProps>): ReactElement {
+}: HeaderProps): ReactElement => {
   const { wideMode, embedded, showToolbar, showColoredLine } =
     useContext(AppContext)
-
-  // Get the active theme from LibContext
   const { activeTheme } = useContext(LibContext)
 
-  let showHeader = true
-  if (embedded) {
-    showHeader = showToolbar || showColoredLine
-  }
-
+  const showHeader = !embedded || showToolbar || showColoredLine
   const hasContent = navigation || rightContent
 
   return (
     <StyledHeader
       showHeader={showHeader}
       isWideMode={wideMode}
-      // The tabindex below is required for testing.
-      tabIndex={-1}
+      tabIndex={-1} // required for testing
       isStale={isStale}
       className="stAppHeader"
       data-testid="stHeader"
@@ -72,39 +63,20 @@ function Header({
         >
           <div
             style={{
+              flexShrink: 0,
               display: "flex",
-              flexDirection: "row",
               alignItems: "center",
               width: "100%",
               margin: 0,
               border: 0,
             }}
           >
-            {/* Logo and navigation section */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {/* Logo comes first if provided */}
+            <div style={{ display: "flex", alignItems: "center" }}>
               {logoComponent && !isSidebarOpen && (
-                <div
-                  style={{
-                    marginLeft: "12px",
-                  }}
-                >
-                  {logoComponent}
-                </div>
+                <div style={{ marginLeft: 12 }}>{logoComponent}</div>
               )}
-
               {hasSidebar && !isSidebarOpen && (
-                <div
-                  style={{
-                    marginLeft: "12px",
-                    marginRight: "12px",
-                  }}
-                >
+                <div style={{ margin: "0 12px" }}>
                   <BaseButton
                     kind={BaseButtonKind.HEADER_NO_PADDING}
                     onClick={onToggleSidebar}
@@ -113,29 +85,19 @@ function Header({
                   </BaseButton>
                 </div>
               )}
-
-              {/* Navigation follows logo */}
-              {navigation && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                  }}
-                >
-                  {navigation}
-                </div>
-              )}
             </div>
-
-            {/* Right section */}
+            {navigation}
             {rightContent && (
               <div
                 style={{
+                  flexShrink: 0,
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "flex-end",
                   marginLeft: "auto",
                   height: "100%",
+                  minWidth: 400,
+                  background: "orchid",
                 }}
               >
                 {rightContent}

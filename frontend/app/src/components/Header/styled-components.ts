@@ -40,6 +40,7 @@ export const StyledHeader = styled.header<StyledHeaderProps>`
   /* Define explicit rendering layer - prevents paint issues */
   backface-visibility: hidden;
   -webkit-font-smoothing: subpixel-antialiased;
+  flex: 1 1 auto;
 `
 
 export const StyledHeaderToolbar = styled.div<{

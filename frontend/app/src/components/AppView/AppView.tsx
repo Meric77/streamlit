@@ -359,11 +359,10 @@ function AppView(props: AppViewProps): ReactElement {
               appPages.length > 1 ? (
                 <TopNav
                   endpoints={endpoints}
+                  pageLinkBaseUrl={pageLinkBaseUrl}
                   appPages={appPages}
                   currentPageScriptHash={currentPageScriptHash}
                   onPageChange={onPageChange}
-                  theme={activeTheme.emotion}
-                  pageLinkBaseUrl={pageLinkBaseUrl}
                 />
               ) : null
             }

@@ -280,7 +280,7 @@ export class App extends PureComponent<Props, State> {
       },
       layout: PageConfig.Layout.CENTERED,
       initialSidebarState: PageConfig.SidebarState.AUTO,
-      menuItems: null,
+      menuItems: undefined,
       allowRunOnSave: true,
       scriptFinishedHandlers: [],
       themeHash,
