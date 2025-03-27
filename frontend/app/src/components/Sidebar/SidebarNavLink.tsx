@@ -69,7 +69,11 @@ const SidebarNavLink = ({
             />
           </StyledSidebarNavIcon>
         ) : null}
-        <StyledSidebarLinkText isActive={isActive} isTopNav={isTopNav}>
+        <StyledSidebarLinkText
+          isActive={isActive}
+          isTopNav={isTopNav}
+          label={children}
+        >
           {children}
         </StyledSidebarLinkText>
       </StyledSidebarNavLink>
