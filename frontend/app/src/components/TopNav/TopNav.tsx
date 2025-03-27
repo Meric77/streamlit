@@ -76,6 +76,7 @@ const TopNav: React.FC<Props> = ({
           return (
             <StyledTopNavLinkContainer>
               <SidebarNavLink
+                isTopNav={true}
                 isActive={currentPageScriptHash === item.pageScriptHash}
                 icon={item.icon}
                 pageUrl={endpoints.buildAppPageURL(pageLinkBaseUrl, item)}
