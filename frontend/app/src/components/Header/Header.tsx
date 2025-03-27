@@ -71,19 +71,22 @@ const Header = ({
               border: 0,
             }}
           >
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               {logoComponent && !isSidebarOpen && (
                 <div style={{ marginLeft: 12 }}>{logoComponent}</div>
               )}
               {hasSidebar && !isSidebarOpen && (
-                <div style={{ margin: "0 12px" }}>
-                  <BaseButton
-                    kind={BaseButtonKind.HEADER_NO_PADDING}
-                    onClick={onToggleSidebar}
-                  >
-                    <Icon content={ChevronRight} size="xl" />
-                  </BaseButton>
-                </div>
+                <BaseButton
+                  kind={BaseButtonKind.HEADER_NO_PADDING}
+                  onClick={onToggleSidebar}
+                >
+                  <Icon content={ChevronRight} size="xl" />
+                </BaseButton>
               )}
             </div>
             {navigation}
