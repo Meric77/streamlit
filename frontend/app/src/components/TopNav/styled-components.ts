@@ -46,6 +46,7 @@ export interface StyledTopNavContainerProps {
 
 export const StyledOverflowContainer = styled.div({
   display: "flex",
+  alignItems: "center",
   width: "100%",
   maxWidth: "100%",
   flexShrink: 1,
@@ -166,3 +167,7 @@ export const StyledNavSection = styled.div({
     borderRadius: "4px",
   },
 })
+
+export const StyledTopNavLinkContainer = styled.div(({ theme }) => ({
+  margin: `${theme.spacing.sm} ${theme.spacing.sm}`,
+}))

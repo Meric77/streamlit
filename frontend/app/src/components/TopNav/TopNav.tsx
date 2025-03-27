@@ -21,7 +21,10 @@ import groupBy from "lodash/groupBy"
 import Overflow from "rc-overflow"
 import { IAppPage } from "@streamlit/protobuf"
 import { StreamlitEndpoints } from "@streamlit/connection"
-import { StyledOverflowContainer } from "./styled-components"
+import {
+  StyledOverflowContainer,
+  StyledTopNavLinkContainer,
+} from "./styled-components"
 import { isNullOrUndefined } from "@streamlit/utils"
 
 export interface Props {
@@ -71,19 +74,21 @@ const TopNav: React.FC<Props> = ({
           )
         } else {
           return (
-            <SidebarNavLink
-              isActive={currentPageScriptHash === item.pageScriptHash}
-              icon={item.icon}
-              pageUrl={endpoints.buildAppPageURL(pageLinkBaseUrl, item)}
-              onClick={e => {
-                e.preventDefault()
-                if (item.pageScriptHash) {
-                  onPageChange(item.pageScriptHash)
-                }
-              }}
-            >
-              {String(item.pageName)}
-            </SidebarNavLink>
+            <StyledTopNavLinkContainer>
+              <SidebarNavLink
+                isActive={currentPageScriptHash === item.pageScriptHash}
+                icon={item.icon}
+                pageUrl={endpoints.buildAppPageURL(pageLinkBaseUrl, item)}
+                onClick={e => {
+                  e.preventDefault()
+                  if (item.pageScriptHash) {
+                    onPageChange(item.pageScriptHash)
+                  }
+                }}
+              >
+                {String(item.pageName)}
+              </SidebarNavLink>
+            </StyledTopNavLinkContainer>
           )
         }
       }}

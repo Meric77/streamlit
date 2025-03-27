@@ -127,6 +127,13 @@ export const StyledSidebarNavIcon = styled.span<StyledSidebarNavIconProps>(
   }
 )
 
+export const StyledSidebarNavLinkListItem = styled.li(({ theme }) => ({
+  marginLeft: theme.spacing.twoXL,
+  marginRight: theme.spacing.twoXL,
+  marginTop: theme.spacing.threeXS,
+  marginBottom: theme.spacing.threeXS,
+}))
+
 export interface StyledSidebarNavLinkProps {
   isActive: boolean
 }
@@ -147,10 +154,7 @@ export const StyledSidebarNavLink = styled.a<StyledSidebarNavLinkProps>(
       borderRadius: theme.radii.default,
       paddingLeft: theme.spacing.sm,
       paddingRight: theme.spacing.sm,
-      marginLeft: theme.spacing.twoXL,
-      marginRight: theme.spacing.twoXL,
-      marginTop: theme.spacing.threeXS,
-      marginBottom: theme.spacing.threeXS,
+
       lineHeight: theme.lineHeights.menuItem,
 
       color: getNavTextColor(theme, isActive),
