@@ -139,7 +139,16 @@ current_page = st.navigation(
 
 
 st.logo("logo.jpg", size="large")
-st.sidebar.image("logo.jpg", width=100)
+
+
+with st.sidebar:
+    st.header("hello world")
+    st.image("logo.jpg", width=160)
+
+    st.write("my name is beans")
+    st.slider(label="how good of a cat beans is", min_value=0, max_value=100, value=100)
+
+    st.text_input("what is your name?")
 
 # Run the current page
 current_page.run()

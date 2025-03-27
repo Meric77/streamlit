@@ -223,8 +223,8 @@ export const StyledSidebarUserContent =
   styled.div<StyledSidebarUserContentProps>(({ hasPageNavAbove, theme }) => ({
     paddingTop: hasPageNavAbove ? theme.spacing.twoXL : 0,
     paddingBottom: theme.sizes.sidebarTopSpace,
-    paddingLeft: theme.spacing.twoXL,
-    paddingRight: theme.spacing.twoXL,
+    paddingLeft: theme.spacing.lg,
+    paddingRight: theme.spacing.lg,
   }))
 
 export const StyledSidebarContent = styled.div({
@@ -255,9 +255,9 @@ export const StyledSidebarHeaderContainer = styled.div(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  padding: theme.spacing.twoXL,
+  padding: theme.spacing.lg,
   // Adjust top padding based on the header decoration height
-  paddingTop: `calc(${theme.spacing.twoXL} - ${theme.sizes.headerDecorationHeight})`,
+  paddingTop: `calc(${theme.spacing.lg} - ${theme.sizes.headerDecorationHeight})`,
   height: "3.75rem",
 }))
 
@@ -296,7 +296,7 @@ export const StyledLogo = styled.img<StyledLogoProps>(
     ...(sidebarWidth && {
       // Control max width of logo so sidebar collapse button always shows (issue #8707)
       // L & R padding (twoXL) + R margin (sm) + collapse button (2.25rem)
-      maxWidth: `calc(${sidebarWidth}px - 2 * ${theme.spacing.twoXL} - ${theme.spacing.sm} - 2.25rem)`,
+      maxWidth: `calc(${sidebarWidth}px - 2 * ${theme.spacing.lg} - ${theme.spacing.sm} - 2.25rem)`,
     }),
   })
 )
