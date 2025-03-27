@@ -31,6 +31,7 @@ import { StreamlitEndpoints } from "@streamlit/connection"
 import {
   BaseButton,
   BaseButtonKind,
+  DynamicIcon,
   EmotionTheme,
   Icon,
   isColoredLineDisplayed,
@@ -331,7 +332,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                 kind={BaseButtonKind.HEADER_NO_PADDING}
                 onClick={toggleCollapse}
               >
-                <Icon content={ChevronLeft} size="xl" />
+                <DynamicIcon
+                  size="xl"
+                  iconValue={":material/keyboard_double_arrow_left:"}
+                  color={theme.colors.fadedText60}
+                />
               </BaseButton>
             </StyledCollapseSidebarButton>
           </StyledSidebarHeaderContainer>

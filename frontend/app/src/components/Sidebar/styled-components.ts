@@ -248,7 +248,6 @@ export const StyledSidebarHeaderContainer = styled.div(({ theme }) => ({
   // Adjust top padding based on the header decoration height
   paddingTop: `calc(${theme.spacing.twoXL} - ${theme.sizes.headerDecorationHeight})`,
   height: "3.75rem",
-  background: "honeydew",
 }))
 
 export const StyledLogoLink = styled.a({

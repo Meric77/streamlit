@@ -16,7 +16,13 @@
 
 import React, { ReactElement, ReactNode, useContext } from "react"
 import { AppContext } from "@streamlit/app/src/components/AppContext"
-import { BaseButton, BaseButtonKind, Icon, LibContext } from "@streamlit/lib"
+import {
+  BaseButton,
+  BaseButtonKind,
+  DynamicIcon,
+  Icon,
+  LibContext,
+} from "@streamlit/lib"
 import { StyledHeader, StyledHeaderToolbar } from "./styled-components"
 import { ChevronRight } from "@emotion-icons/material-outlined"
 
@@ -85,7 +91,11 @@ const Header = ({
                   kind={BaseButtonKind.HEADER_NO_PADDING}
                   onClick={onToggleSidebar}
                 >
-                  <Icon content={ChevronRight} size="xl" />
+                  <DynamicIcon
+                    size="xl"
+                    iconValue={":material/keyboard_double_arrow_right:"}
+                    color={activeTheme.emotion.colors.fadedText60}
+                  />
                 </BaseButton>
               )}
             </div>
