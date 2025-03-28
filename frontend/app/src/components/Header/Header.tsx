@@ -110,7 +110,7 @@ const Header = ({
                   marginLeft: "auto",
                   height: "100%",
                   minWidth: "19.5rem",
-                  background: "orchid",
+                  marginRight: "1rem",
                 }}
               >
                 {rightContent}
