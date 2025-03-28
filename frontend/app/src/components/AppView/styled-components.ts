@@ -30,7 +30,6 @@ export const StyledAppViewContainer = styled.div({
   right: 0,
   bottom: 0,
   overflow: "hidden",
-  background: "papayawhip",
 
   "@media print": {
     // print multiple pages if app is scrollable in Safari
@@ -51,8 +50,6 @@ export const StyledAppViewMain = styled.section<StyledAppViewMainProps>(
     overflow: disableScrolling ? "hidden" : "auto",
     alignItems: "center",
     height: "100vh",
-
-    background: "salmon",
 
     "&:focus": {
       outline: "none",
@@ -166,7 +163,6 @@ export const StyledAppViewBlockContainer =
         [`@media print`]: {
           paddingTop: littlePadding,
         },
-        background: "aquamarine",
       }
     }
   )
