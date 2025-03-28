@@ -17,7 +17,7 @@
 import styled from "@emotion/styled"
 import { transparentize } from "color2k"
 
-import { hasLightBackgroundColor } from "@streamlit/lib"
+import { EmotionTheme, hasLightBackgroundColor } from "@streamlit/lib"
 
 /**
  * Returns the color of the text in the sidebar nav.
@@ -34,6 +34,18 @@ const getNavTextColor = (theme: any, isActive: boolean): string => {
   return isLightTheme
     ? transparentize(theme.colors.bodyText, 0.2)
     : transparentize(theme.colors.bodyText, 0.25)
+}
+
+/**
+ * Returns the padding for the sidebar. Since scrollbarGutter is set to stable
+ * both-edges, we need to match the prior spacing, which doesn't directly map to
+ * a value in the theme.spacing object. We add 2px to achieve this.
+ *
+ * @param theme The theme to use.
+ * @returns The padding for the sidebar.
+ */
+const getSidebarPadding = (theme: EmotionTheme): string => {
+  return `calc(${theme.spacing.lg} + 2px)`
 }
 
 export interface StyledSidebarProps {
@@ -146,8 +158,8 @@ export const StyledSidebarNavLink = styled.a<StyledSidebarNavLinkProps>(
       borderRadius: theme.radii.default,
       paddingLeft: theme.spacing.sm,
       paddingRight: theme.spacing.sm,
-      marginLeft: theme.spacing.lg,
-      marginRight: theme.spacing.lg,
+      marginLeft: getSidebarPadding(theme),
+      marginRight: getSidebarPadding(theme),
       marginTop: theme.spacing.threeXS,
       marginBottom: theme.spacing.threeXS,
       lineHeight: theme.lineHeights.menuItem,
@@ -198,8 +210,8 @@ export const StyledSidebarUserContent =
   styled.div<StyledSidebarUserContentProps>(({ hasPageNavAbove, theme }) => ({
     paddingTop: hasPageNavAbove ? theme.spacing.twoXL : 0,
     paddingBottom: theme.sizes.sidebarTopSpace,
-    paddingLeft: theme.spacing.lg,
-    paddingRight: theme.spacing.lg,
+    paddingLeft: getSidebarPadding(theme),
+    paddingRight: getSidebarPadding(theme),
   }))
 
 export const StyledSidebarContent = styled.div({
@@ -241,8 +253,8 @@ export const StyledSidebarHeaderContainer = styled.div(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "start",
   paddingBottom: theme.spacing.twoXL,
-  paddingLeft: theme.spacing.lg,
-  paddingRight: theme.spacing.lg,
+  paddingLeft: getSidebarPadding(theme),
+  paddingRight: getSidebarPadding(theme),
   // Adjust top padding based on the header decoration height
   paddingTop: `calc(${theme.spacing.twoXL} - ${theme.sizes.headerDecorationHeight})`,
 }))
@@ -285,7 +297,9 @@ export const StyledLogo = styled.img<StyledLogoProps>(
       //
       // Note that 8px for scrollbarGutter is an estimate, since the actual
       // value changes depending on the browser and OS.
-      maxWidth: `calc(${sidebarWidth}px - 2 * ${theme.spacing.lg} - 2 * 8px - ${theme.spacing.sm} - 2.25rem)`,
+      maxWidth: `calc(${sidebarWidth}px - 2 * ${getSidebarPadding(
+        theme
+      )} * 8px - ${theme.spacing.sm} - 2.25rem)`,
     }),
   })
 )

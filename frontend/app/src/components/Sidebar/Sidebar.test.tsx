@@ -374,9 +374,9 @@ describe("Sidebar Component", () => {
       const sidebarLogo = within(screen.getByTestId("stSidebar")).getByTestId(
         "stLogo"
       )
-      // L & R padding (twoXL) + R margin (sm) + collapse button (2.25rem)
+      // L & R sidebar padding + 8px margin for scrollbarGutter + R margin (sm) + collapse button (2.25rem)
       expect(sidebarLogo).toHaveStyle(
-        `max-width: calc(${sidebarWidth} - 2 * 1.5rem - 0.5rem - 2.25rem)`
+        `max-width: calc(${sidebarWidth} - 2 * calc(1rem + 2px) * 8px - 0.5rem - 2.25rem)`
       )
     })
 
