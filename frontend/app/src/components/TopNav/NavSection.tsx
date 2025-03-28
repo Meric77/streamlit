@@ -77,7 +77,9 @@ const NavSection = ({
               }
               return (
                 <>
-                  {index === 0 && showSections && <div>{sectionName}</div>}
+                  {index === 0 && showSections && (
+                    <div style={{ marginLeft: "0.5rem" }}>{sectionName}</div>
+                  )}
                   <StyledSidebarNavLinkContainer>
                     <SidebarNavLink
                       {...item}
