@@ -29,6 +29,8 @@ export interface StyledTopNavContainerProps {
 export const StyledOverflowContainer = styled.div({
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
   width: "100%",
   maxWidth: "100%",
   flexShrink: 1,
@@ -139,7 +141,7 @@ export const StyledNavSection = styled.div(({ theme }) => ({
   marginRight: "8px",
   display: "flex",
   alignItems: "center",
-  width: "100%",
+  // width: "100%",
   cursor: "pointer",
   position: "relative",
   padding: "4px 8px",
@@ -154,3 +156,5 @@ export const StyledNavSection = styled.div(({ theme }) => ({
 export const StyledTopNavLinkContainer = styled.div(({ theme }) => ({
   margin: `${theme.spacing.sm} ${theme.spacing.sm}`,
 }))
+
+export const StyledNavSectionText = styled.span(({ theme }) => ({}))

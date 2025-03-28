@@ -104,6 +104,7 @@ const TopNav: React.FC<Props> = ({
         if (Array.isArray(items[0])) {
           return (
             <NavSection
+              hideChevron={true}
               sections={items as IAppPage[][]}
               title={title}
               handlePageChange={onPageChange}
@@ -115,6 +116,7 @@ const TopNav: React.FC<Props> = ({
         } else {
           return (
             <NavSection
+              hideChevron={true}
               sections={[items as IAppPage[]]}
               title={title}
               handlePageChange={onPageChange}

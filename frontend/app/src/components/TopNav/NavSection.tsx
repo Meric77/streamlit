@@ -21,7 +21,7 @@ import SidebarNavLink from "../Sidebar/SidebarNavLink"
 import { Icon } from "@streamlit/lib"
 import { KeyboardArrowDown } from "@emotion-icons/material-outlined"
 import { isNullOrUndefined } from "@streamlit/utils"
-import { StyledNavSection } from "./styled-components"
+import { StyledNavSection, StyledNavSectionText } from "./styled-components"
 import { IAppPage } from "@streamlit/protobuf"
 import { StreamlitEndpoints } from "@streamlit/connection"
 interface NavSectionProps {
@@ -31,6 +31,7 @@ interface NavSectionProps {
   endpoints: StreamlitEndpoints
   pageLinkBaseUrl: string
   currentPageScriptHash: string
+  hideChevron?: boolean
 }
 
 const NavSection = ({
@@ -40,6 +41,7 @@ const NavSection = ({
   endpoints,
   pageLinkBaseUrl,
   currentPageScriptHash,
+  hideChevron = false,
 }: NavSectionProps) => {
   if (
     isNullOrUndefined(sections) ||
@@ -89,8 +91,8 @@ const NavSection = ({
       }
     >
       <StyledNavSection>
-        {title}
-        <Icon content={KeyboardArrowDown} size="lg" />
+        <StyledNavSectionText>{title}</StyledNavSectionText>
+        {!hideChevron && <Icon content={KeyboardArrowDown} size="lg" />}
       </StyledNavSection>
     </StatefulPopover>
   )
