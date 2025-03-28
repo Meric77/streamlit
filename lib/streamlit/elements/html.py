@@ -15,8 +15,9 @@
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any, cast, tuple
 
 from streamlit.proto.Html_pb2 import Html as HtmlProto
 from streamlit.runtime.metrics_util import gather_metrics
@@ -75,16 +76,22 @@ class HtmlMixin:
 
         # If body supports _repr_html_, use that.
         if has_callable_attr(body, "_repr_html_"):
-            html_proto.body = cast("SupportsReprHtml", body)._repr_html_()
+            html_content = cast("SupportsReprHtml", body)._repr_html_()
 
         # Check if the body is a file path. May include filesystem lookup.
         elif isinstance(body, Path) or _is_file(body):
             with open(cast("str", body), encoding="utf-8") as f:
-                html_proto.body = f.read()
+                html_content = f.read()
 
         # OK, let's just try converting to string and hope for the best.
         else:
-            html_proto.body = clean_text(cast("SupportsStr", body))
+            html_content = clean_text(cast("SupportsStr", body))
+
+        # Extract style tags from the HTML, returning both the cleaned HTML and styles separately
+        html_without_styles, styles = _extract_style_tags(html_content)
+
+        # Set the cleaned HTML as the body
+        html_proto.body = html_without_styles
 
         return self.dg._enqueue("html", html_proto)
 
@@ -92,6 +99,20 @@ class HtmlMixin:
     def dg(self) -> DeltaGenerator:
         """Get our DeltaGenerator."""
         return cast("DeltaGenerator", self)
+
+
+def _extract_style_tags(html_content: str) -> tuple[str, str]:
+    """Extract style tags and their contents from HTML, returning both the non-style HTML and styles."""
+    # Pattern to match style tags and their contents
+    style_pattern = r"<style[^>]*>.*?</style>"
+
+    # Extract all style tags and their contents
+    styles = "\n".join(re.findall(style_pattern, html_content, re.DOTALL))
+
+    # Remove style tags and their contents from the HTML
+    html_without_styles = re.sub(style_pattern, "", html_content, flags=re.DOTALL)
+
+    return html_without_styles, styles
 
 
 def _is_file(obj: Any) -> bool:
