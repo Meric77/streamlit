@@ -37,14 +37,18 @@ const getNavTextColor = (theme: any, isActive: boolean): string => {
 }
 
 /**
- * Returns the padding for the sidebar. Since scrollbarGutter is set to stable
- * both-edges, we need to match the prior spacing, which doesn't directly map to
- * a value in the theme.spacing object. We add 2px to achieve this.
+ * Returns the horizontal spacing for the sidebar. Since scrollbarGutter is set
+ * to `stable both-edges`, we need to match the prior spacing from when we were
+ * reliant on overlay scrollbars. This doesn't directly map to a value in the
+ * theme.spacing object. We add 2px to achieve this as a close approximation for
+ * Chrome. The space reserved for the scrollbar is dependent upon browser and
+ * OS, so this will be an imperfect match to prior behavior due to the
+ * deprecated browser API of `overflow: overlay`.
  *
  * @param theme The theme to use.
- * @returns The padding for the sidebar.
+ * @returns The horizontal spacing for the sidebar.
  */
-const getSidebarPadding = (theme: EmotionTheme): string => {
+const getSidebarHorizontalSpacing = (theme: EmotionTheme): string => {
   return `calc(${theme.spacing.lg} + 2px)`
 }
 
@@ -158,8 +162,8 @@ export const StyledSidebarNavLink = styled.a<StyledSidebarNavLinkProps>(
       borderRadius: theme.radii.default,
       paddingLeft: theme.spacing.sm,
       paddingRight: theme.spacing.sm,
-      marginLeft: getSidebarPadding(theme),
-      marginRight: getSidebarPadding(theme),
+      marginLeft: getSidebarHorizontalSpacing(theme),
+      marginRight: getSidebarHorizontalSpacing(theme),
       marginTop: theme.spacing.threeXS,
       marginBottom: theme.spacing.threeXS,
       lineHeight: theme.lineHeights.menuItem,
@@ -210,8 +214,8 @@ export const StyledSidebarUserContent =
   styled.div<StyledSidebarUserContentProps>(({ hasPageNavAbove, theme }) => ({
     paddingTop: hasPageNavAbove ? theme.spacing.twoXL : 0,
     paddingBottom: theme.sizes.sidebarTopSpace,
-    paddingLeft: getSidebarPadding(theme),
-    paddingRight: getSidebarPadding(theme),
+    paddingLeft: getSidebarHorizontalSpacing(theme),
+    paddingRight: getSidebarHorizontalSpacing(theme),
   }))
 
 export const StyledSidebarContent = styled.div({
@@ -253,8 +257,8 @@ export const StyledSidebarHeaderContainer = styled.div(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "start",
   paddingBottom: theme.spacing.twoXL,
-  paddingLeft: getSidebarPadding(theme),
-  paddingRight: getSidebarPadding(theme),
+  paddingLeft: getSidebarHorizontalSpacing(theme),
+  paddingRight: getSidebarHorizontalSpacing(theme),
   // Adjust top padding based on the header decoration height
   paddingTop: `calc(${theme.spacing.twoXL} - ${theme.sizes.headerDecorationHeight})`,
 }))
@@ -297,7 +301,7 @@ export const StyledLogo = styled.img<StyledLogoProps>(
       //
       // Note that 8px for scrollbarGutter is an estimate, since the actual
       // value changes depending on the browser and OS.
-      maxWidth: `calc(${sidebarWidth}px - 2 * ${getSidebarPadding(
+      maxWidth: `calc(${sidebarWidth}px - 2 * ${getSidebarHorizontalSpacing(
         theme
       )} * 8px - ${theme.spacing.sm} - 2.25rem)`,
     }),
@@ -392,8 +396,8 @@ export const StyledSidebarNavSectionHeader = styled.header(({ theme }) => {
     color: getNavTextColor(theme, false),
     lineHeight: theme.lineHeights.small,
     paddingRight: theme.spacing.sm,
-    marginLeft: theme.spacing.twoXL,
-    marginRight: theme.spacing.twoXL,
+    marginLeft: getSidebarHorizontalSpacing(theme),
+    marginRight: getSidebarHorizontalSpacing(theme),
     marginTop: theme.spacing.sm,
     marginBottom: theme.spacing.twoXS,
   }
