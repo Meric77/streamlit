@@ -109,7 +109,7 @@ const Header = ({
                   justifyContent: "flex-end",
                   marginLeft: "auto",
                   height: "100%",
-                  minWidth: 400,
+                  minWidth: "19.5rem",
                   background: "orchid",
                 }}
               >
