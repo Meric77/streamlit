@@ -18,25 +18,7 @@ import styled from "@emotion/styled"
 import { transparentize } from "color2k"
 import { hasLightBackgroundColor } from "@streamlit/lib"
 import type { EmotionTheme } from "@streamlit/lib"
-
-/**
- * Returns the color of the text in the top nav.
- *
- * @param theme The theme to use.
- * @param isActive Whether the nav text should show as active.
- * @returns The color of the text in the top nav.
- */
-export const getNavTextColor = (
-  theme: EmotionTheme,
-  isActive: boolean
-): string => {
-  // For active navigation links, use the primary color with a fallback
-  if (isActive) {
-    return theme.colors?.primary || "#FF4B4B"
-  }
-  // For inactive links, use bodyText with a fallback
-  return theme.colors?.bodyText || "#000000"
-}
+import { getNavTextColor } from "../Sidebar/styled-components"
 
 export interface StyledTopNavContainerProps {
   theme: EmotionTheme
@@ -152,7 +134,7 @@ export const StyledTopNavSectionSeparator = styled.div<{
   pointer-events: none; /* Don't capture events */
 `
 
-export const StyledNavSection = styled.div({
+export const StyledNavSection = styled.div(({ theme }) => ({
   marginLeft: "8px",
   marginRight: "8px",
   display: "flex",
@@ -160,13 +142,14 @@ export const StyledNavSection = styled.div({
   width: "100%",
   cursor: "pointer",
   position: "relative",
-  transition: "background-color 0.2s ease",
   padding: "4px 8px",
+  lineHeight: "2rem",
+  color: getNavTextColor(theme, false, true),
   "&:active": {
     backgroundColor: "rgba(0, 0, 0, 0.05)",
     borderRadius: "4px",
   },
-})
+}))
 
 export const StyledTopNavLinkContainer = styled.div(({ theme }) => ({
   margin: `${theme.spacing.sm} ${theme.spacing.sm}`,

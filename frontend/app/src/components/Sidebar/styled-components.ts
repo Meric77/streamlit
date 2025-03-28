@@ -26,7 +26,7 @@ import { hasLightBackgroundColor } from "@streamlit/lib"
  * @param isActive Whether the nav text should show as active.
  * @returns The color of the text in the sidebar nav.
  */
-const getNavTextColor = (
+export const getNavTextColor = (
   theme: any,
   isActive: boolean,
   isTopNav?: boolean
@@ -201,7 +201,8 @@ export const StyledSidebarLinkText = styled.span<StyledSidebarNavLinkProps>(
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       display: "table-cell",
-      height: "2rem",
+      // height: "2.5rem",
+      // lineHeight: "2.5rem",
       /* Pseudo-element to reserve bold width */
       "&::after": {
         content: `"${label}"` /* duplicate text */,
@@ -209,7 +210,8 @@ export const StyledSidebarLinkText = styled.span<StyledSidebarNavLinkProps>(
         visibility: "hidden" /* occupies space, not visible */,
         display: "block",
         width: "fit-content",
-        transform: "translateY(-100%)",
+        height: 0,
+        // transform: "translateY(-100%)",
       },
     }
   }

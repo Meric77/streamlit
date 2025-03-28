@@ -74,6 +74,7 @@ const NavSection = ({
                   {index === 0 && showSections && <div>{sectionName}</div>}
                   <SidebarNavLink
                     {...item}
+                    isTopNav={true}
                     isActive={currentPageScriptHash === item.pageScriptHash}
                     onClick={handleClick}
                     pageUrl={endpoints.buildAppPageURL(pageLinkBaseUrl, item)}
