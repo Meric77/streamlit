@@ -21,7 +21,12 @@ import SidebarNavLink from "../Sidebar/SidebarNavLink"
 import { Icon } from "@streamlit/lib"
 import { KeyboardArrowDown } from "@emotion-icons/material-outlined"
 import { isNullOrUndefined } from "@streamlit/utils"
-import { StyledNavSection, StyledNavSectionText } from "./styled-components"
+import {
+  StyledNavSection,
+  SidebarNavLinkContainer,
+  StyledSidebarNavLinkContainer,
+  StyledNavSectionText,
+} from "./styled-components"
 import { IAppPage } from "@streamlit/protobuf"
 import { StreamlitEndpoints } from "@streamlit/connection"
 interface NavSectionProps {
@@ -58,9 +63,8 @@ const NavSection = ({
       triggerType="click"
       placement={PLACEMENT.bottomLeft}
       content={
-        <div style={{ padding: "8px 8px" }}>
+        <div style={{ padding: "0.25rem 0" }}>
           {sections.map(section => {
-            console.log(section)
             const sectionName = section[0].sectionHeader
 
             return section.map((item, index) => {
@@ -74,15 +78,20 @@ const NavSection = ({
               return (
                 <>
                   {index === 0 && showSections && <div>{sectionName}</div>}
-                  <SidebarNavLink
-                    {...item}
-                    isTopNav={true}
-                    isActive={currentPageScriptHash === item.pageScriptHash}
-                    onClick={handleClick}
-                    pageUrl={endpoints.buildAppPageURL(pageLinkBaseUrl, item)}
-                  >
-                    {String(item.pageName)}
-                  </SidebarNavLink>
+                  <StyledSidebarNavLinkContainer>
+                    <SidebarNavLink
+                      {...item}
+                      isTopNav={true}
+                      isActive={currentPageScriptHash === item.pageScriptHash}
+                      onClick={handleClick}
+                      pageUrl={endpoints.buildAppPageURL(
+                        pageLinkBaseUrl,
+                        item
+                      )}
+                    >
+                      {String(item.pageName)}
+                    </SidebarNavLink>
+                  </StyledSidebarNavLinkContainer>
                 </>
               )
             })

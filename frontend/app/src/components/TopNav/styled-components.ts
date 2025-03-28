@@ -158,3 +158,7 @@ export const StyledTopNavLinkContainer = styled.div(({ theme }) => ({
 }))
 
 export const StyledNavSectionText = styled.span(({ theme }) => ({}))
+
+export const StyledSidebarNavLinkContainer = styled.div(({ theme }) => ({
+  margin: `${theme.spacing.twoXS} ${theme.spacing.sm}`,
+}))
