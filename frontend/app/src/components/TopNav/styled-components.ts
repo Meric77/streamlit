@@ -20,10 +20,8 @@ import { getNavTextColor } from "../Sidebar/styled-components"
 export const StyledOverflowContainer = styled.div({
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
-  textAlign: "center",
   width: "100%",
-  maxWidth: "100%",
+  maxWidth: "calc(100% - 19.5rem)", // TODO: import a const here 19.5rem is the width of the right content in Header
   flexShrink: 1,
 })
 
