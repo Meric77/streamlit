@@ -413,7 +413,7 @@ export const StyledViewButton = styled.button(({ theme }) => {
     border: "none",
     borderRadius: theme.radii.default,
     marginTop: theme.spacing.twoXS,
-    marginLeft: theme.spacing.xl,
+    marginLeft: theme.spacing.lg,
     marginBottom: theme.spacing.none,
     marginRight: theme.spacing.none,
     padding: `${theme.spacing.threeXS} ${theme.spacing.sm}`,
