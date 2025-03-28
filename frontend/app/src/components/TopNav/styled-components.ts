@@ -141,15 +141,16 @@ export const StyledNavSection = styled.div(({ theme }) => ({
   marginRight: "8px",
   display: "flex",
   alignItems: "center",
+  height: "2rem",
   // width: "100%",
   cursor: "pointer",
   position: "relative",
   padding: "4px 8px",
   lineHeight: "2rem",
   color: getNavTextColor(theme, false, true),
-  "&:active": {
+  borderRadius: "4px",
+  "&:hover": {
     backgroundColor: "rgba(0, 0, 0, 0.05)",
-    borderRadius: "4px",
   },
 }))
 
