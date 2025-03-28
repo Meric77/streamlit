@@ -72,6 +72,7 @@ const Header = ({
               flexShrink: 0,
               display: "flex",
               alignItems: "center",
+              justifyContent: "space-between",
               width: "100%",
               margin: 0,
               border: 0,
