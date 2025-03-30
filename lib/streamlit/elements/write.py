@@ -429,6 +429,7 @@ class WriteMixin:
                 text_container.markdown(
                     text_content,
                     unsafe_allow_html=unsafe_allow_html,
+                    width="stretch",
                 )
                 string_buffer[:] = []
 
