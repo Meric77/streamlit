@@ -296,6 +296,7 @@ export interface StyledFlexContainerWrapperProps {
   maxWidth?: React.CSSProperties["maxWidth"]
   border?: boolean
   verticalScroll?: boolean
+  alignSelf?: React.CSSProperties["alignSelf"]
 }
 
 export const StyledFlexContainerWrapper =
@@ -313,6 +314,7 @@ export const StyledFlexContainerWrapper =
       height,
       maxWidth,
       verticalScroll,
+      alignSelf,
     }) => {
       const gapWidth = translateGapWidth(gap, theme)
       const overflowY = verticalScroll ? "auto" : undefined
@@ -333,6 +335,7 @@ export const StyledFlexContainerWrapper =
         justifyContent: getJustifyContent(justify),
         flexWrap: wrap ? "wrap" : "nowrap",
         gap: gapWidth,
+        alignSelf: alignSelf,
       }
     }
   )

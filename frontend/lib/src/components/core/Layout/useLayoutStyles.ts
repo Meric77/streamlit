@@ -21,9 +21,9 @@ export type UseLayoutStylesArgs<T> = {
   width: React.CSSProperties["width"] | undefined
   element:
     | (T & {
-        width?: number
-        height?: number
-        useContainerWidth?: boolean | null
+        width?: number | string
+        height?: number | string
+        useContainerWidth?: boolean | undefined
         flex?: string
         scale?: number
         size?: number | "stretch"
@@ -45,6 +45,7 @@ export type UseLayoutStylesShape = {
   marginLeft?: React.CSSProperties["marginLeft"]
   marginTop?: React.CSSProperties["marginTop"]
   verticalScroll?: boolean
+  alignSelf?: React.CSSProperties["alignSelf"]
 }
 
 const validateWidth = (
@@ -98,22 +99,22 @@ const getWidth = (
   if (useContainerWidth !== undefined && useContainerWidth) {
     return validateWidth(containerWidth)
   }
-  if (commandWidth === "stretch") {
+  if (String(commandWidth) === "stretch") {
     return "100%"
   } else if (!Number.isNaN(Number(commandWidth))) {
     return `${validateWidth(commandWidth)}px`
-  } else if (commandWidth === "content") {
+  } else if (String(commandWidth) === "content") {
     return "fit-content"
   }
   return "auto"
 }
 
-const getHeight = (commandHeight: string | number) => {
-  if (commandHeight === "stretch") {
-    return "100%"
+const getHeight = (commandHeight: string | number | undefined) => {
+  if (String(commandHeight) === "stretch") {
+    return "auto"
   } else if (!Number.isNaN(Number(commandHeight))) {
     return `${validateWidth(commandHeight)}px`
-  } else if (commandHeight === "content") {
+  } else if (String(commandHeight) === "content") {
     return "fit-content"
   }
   return "auto"
@@ -273,13 +274,17 @@ export const useLayoutStyles = <T>({
     )
     const height = getHeight(commandHeight)
     const verticalScroll = getVerticalScroll(commandHeight)
-    const styles = {
+    const styles: UseLayoutStylesShape = {
       width,
       height,
       maxWidth: "100%",
       maxHeight: "100%",
       flex,
       verticalScroll,
+    }
+
+    if (String(commandHeight) === "stretch") {
+      styles.alignSelf = "stretch"
     }
 
     return styles
