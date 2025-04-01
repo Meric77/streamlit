@@ -69,6 +69,17 @@ class StHtmlAPITest(DeltaGeneratorTestCase):
         el = self.get_delta_from_queue().new_element
         self.assertEqual(el.html.body, "<h1>Hello, World!</h1>")
 
+    def test_st_html_with_css_file(self):
+        """Test st.html with CSS file."""
+        st.html(pathlib.Path(__file__).parent / "test_html.css")
+
+        el = self.get_delta_from_queue().new_element
+        # Check that the CSS file contents are wrapped in a style tag
+        self.assertEqual(
+            el.html.body,
+            "<style>h1 {\n  color: red;\n}\n\nh2 {\n  color: blue;\n}\n</style>",
+        )
+
     def test_st_html_with_file(self):
         """Test st.html with file."""
         st.html(str(pathlib.Path(__file__).parent / "test_html.js"))

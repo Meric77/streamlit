@@ -21,7 +21,7 @@ from e2e_playwright.shared.app_utils import check_top_level_class
 # If a style tag is combined with other tags in the same st.html call,
 # it will generate 2 stHtml elements - one with style tag(s) in the event container,
 # and one with the rest of the tag(s) in the main container.
-ST_HTML_ELEMENTS = 7
+ST_HTML_ELEMENTS = 8
 
 
 def test_html_in_line_styles(themed_app: Page, assert_snapshot: ImageCompareFunction):
@@ -103,9 +103,23 @@ def test_html_rendered_in_correct_container(app: Page):
     # Check that the style tags are in the event container
     event_container = app.get_by_test_id("stEvent")
     style_html_elements = event_container.get_by_test_id("stHtml")
-    expect(style_html_elements).to_have_count(2)
+    expect(style_html_elements).to_have_count(3)
 
     # Check that the remaining 5 stHtml elements are in the main container
     main_container = app.get_by_test_id("stMain")
     other_html_elements = main_container.get_by_test_id("stHtml")
     expect(other_html_elements).to_have_count(5)
+
+
+def test_html_with_css_file(app: Page):
+    """Test that we can load CSS files and they are wrapped in style tags."""
+    html_elements = app.get_by_test_id("stHtml")
+    expect(html_elements).to_have_count(ST_HTML_ELEMENTS)
+
+    # Check that the styling is applied correctly
+    heading_1 = app.get_by_text("Hello, World!")
+    expect(heading_1).to_have_css("color", "rgb(255, 0, 0)")
+    heading_2 = app.get_by_text("Random")
+    expect(heading_2).to_have_css("color", "rgb(0, 0, 255)")
+    heading_3 = app.get_by_text("Corgis")
+    expect(heading_3).to_have_css("color", "rgb(0, 128, 0)")
