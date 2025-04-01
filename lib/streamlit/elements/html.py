@@ -95,7 +95,7 @@ class HtmlMixin:
             html_content = clean_text(cast("SupportsStr", body))
 
         if html_content == "":
-            raise StreamlitAPIException("`st.html` content cannot be empty")
+            raise StreamlitAPIException("`st.html` body cannot be empty")
         else:
             # Extract style tags from the HTML, returning both the cleaned HTML and styles separately
             html_without_styles, styles = _extract_style_tags(html_content)

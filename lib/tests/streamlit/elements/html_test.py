@@ -15,6 +15,7 @@
 import pathlib
 
 import streamlit as st
+from streamlit.errors import StreamlitAPIException
 from tests.delta_generator_test_case import DeltaGeneratorTestCase
 
 
@@ -27,6 +28,13 @@ class StHtmlAPITest(DeltaGeneratorTestCase):
 
         el = self.get_delta_from_queue().new_element
         self.assertEqual(el.html.body, "<i> This is a i tag </i>")
+
+    def test_st_html_empty_body_throws_error(self):
+        """Test st.html with empty body throws error."""
+        with self.assertRaises(StreamlitAPIException) as ctx:
+            st.html("")
+
+        self.assertIn("`st.html` body cannot be empty", str(ctx.exception))
 
     def test_st_html_with_style_tag_only(self):
         """Test st.html with only a style tag."""

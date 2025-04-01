@@ -101,14 +101,24 @@ def test_html_rendered_in_correct_container(app: Page):
     expect(all_html_elements).to_have_count(ST_HTML_ELEMENTS)
 
     # Check that the style tags are in the event container
+    # and are not visible
     event_container = app.get_by_test_id("stEvent")
     style_html_elements = event_container.get_by_test_id("stHtml")
     expect(style_html_elements).to_have_count(3)
+    expect(style_html_elements.nth(0)).not_to_be_visible()
+    expect(style_html_elements.nth(1)).not_to_be_visible()
+    expect(style_html_elements.nth(2)).not_to_be_visible()
 
     # Check that the remaining 5 stHtml elements are in the main container
+    # and are visible
     main_container = app.get_by_test_id("stMain")
     other_html_elements = main_container.get_by_test_id("stHtml")
     expect(other_html_elements).to_have_count(5)
+    expect(other_html_elements.nth(0)).to_be_visible()
+    expect(other_html_elements.nth(1)).to_be_visible()
+    expect(other_html_elements.nth(2)).to_be_visible()
+    expect(other_html_elements.nth(3)).to_be_visible()
+    expect(other_html_elements.nth(4)).to_be_visible()
 
 
 def test_html_with_css_file(app: Page):
