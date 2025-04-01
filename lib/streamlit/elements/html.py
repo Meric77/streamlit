@@ -17,8 +17,10 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, cast, tuple
+from typing import TYPE_CHECKING, Any, cast
 
+from streamlit.delta_generator_singletons import get_dg_singleton_instance
+from streamlit.errors import StreamlitAPIException
 from streamlit.proto.Html_pb2 import Html as HtmlProto
 from streamlit.runtime.metrics_util import gather_metrics
 from streamlit.string_util import clean_text
@@ -87,18 +89,37 @@ class HtmlMixin:
         else:
             html_content = clean_text(cast("SupportsStr", body))
 
-        # Extract style tags from the HTML, returning both the cleaned HTML and styles separately
-        html_without_styles, styles = _extract_style_tags(html_content)
+        if html_content == "":
+            raise StreamlitAPIException("`st.html` content cannot be empty")
+        else:
+            # Extract style tags from the HTML, returning both the cleaned HTML and styles separately
+            html_without_styles, styles = _extract_style_tags(html_content)
 
-        # Set the cleaned HTML as the body
-        html_proto.body = html_without_styles
+        returned_dg = self.dg
+        if styles:
+            # Send the styles to be rendered by the event container,
+            # that way they don't take up space in the app content
+            styles_proto = HtmlProto()
+            styles_proto.body = styles
+            styles_proto.empty = True
+            returned_dg = self._event_dg._enqueue("html", styles_proto)
 
-        return self.dg._enqueue("html", html_proto)
+        if html_without_styles:
+            # Set the non-style HTML as the body
+            html_proto.body = html_without_styles
+            returned_dg = self.dg._enqueue("html", html_proto)
+
+        return returned_dg
 
     @property
     def dg(self) -> DeltaGenerator:
         """Get our DeltaGenerator."""
         return cast("DeltaGenerator", self)
+
+    @property
+    def _event_dg(self) -> DeltaGenerator:
+        """Get the event delta generator."""
+        return get_dg_singleton_instance().event_dg
 
 
 def _extract_style_tags(html_content: str) -> tuple[str, str]:

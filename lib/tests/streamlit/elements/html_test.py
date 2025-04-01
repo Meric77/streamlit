@@ -28,6 +28,47 @@ class StHtmlAPITest(DeltaGeneratorTestCase):
         el = self.get_delta_from_queue().new_element
         self.assertEqual(el.html.body, "<i> This is a i tag </i>")
 
+    def test_st_html_with_style_tag_only(self):
+        """Test st.html with only a style tag."""
+        st.html("<style>.stHeading h3 { color: purple; }</style>")
+
+        # The style tag should be enqueued to the event delta generator
+        style_msg = self.get_message_from_queue()
+        self.assertEqual(
+            [2, 0],  # The path indicates it's the first element in event container
+            style_msg.metadata.delta_path,
+        )
+
+        # Check that html body is the expected style tag
+        style_el = self.get_delta_from_queue().new_element
+        self.assertEqual(
+            style_el.html.body, "<style>.stHeading h3 { color: purple; }</style>"
+        )
+
+    def test_st_html_with_style_and_other_tags(self):
+        """Test st.html with style and other tags."""
+        st.html("<style>.stHeading h3 { color: purple; }</style><h1>Hello, World!</h1>")
+
+        # The style tag is enqueued to the event delta generator first
+        style_msg = self.get_message_from_queue(-2)
+        self.assertEqual(
+            [2, 0],  # The path indicates it's the first element in event container
+            style_msg.metadata.delta_path,
+        )
+        style_el = self.get_delta_from_queue(-2).new_element
+        self.assertEqual(
+            style_el.html.body, "<style>.stHeading h3 { color: purple; }</style>"
+        )
+
+        # Then the non-style html enqueued to the main delta generator
+        msg = self.get_message_from_queue()
+        self.assertEqual(
+            [0, 0],  # The path indicates it's the first element in main container
+            msg.metadata.delta_path,
+        )
+        el = self.get_delta_from_queue().new_element
+        self.assertEqual(el.html.body, "<h1>Hello, World!</h1>")
+
     def test_st_html_with_file(self):
         """Test st.html with file."""
         st.html(str(pathlib.Path(__file__).parent / "test_html.js"))
