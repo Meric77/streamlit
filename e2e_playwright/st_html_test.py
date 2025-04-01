@@ -17,11 +17,17 @@ from playwright.sync_api import Page, expect
 from e2e_playwright.conftest import ImageCompareFunction
 from e2e_playwright.shared.app_utils import check_top_level_class
 
+# Each st.html call generates a stHtml frontend element.
+# If a style tag is combined with other tags in the same st.html call,
+# it will generate 2 stHtml elements - one with style tag(s) in the event container,
+# and one with the rest of the tag(s) in the main container.
+ST_HTML_ELEMENTS = 7
+
 
 def test_html_in_line_styles(themed_app: Page, assert_snapshot: ImageCompareFunction):
     """Test that html renders correctly using snapshot testing."""
     html_elements = themed_app.get_by_test_id("stHtml")
-    expect(html_elements).to_have_count(6)
+    expect(html_elements).to_have_count(ST_HTML_ELEMENTS)
     first_html = html_elements.nth(0)
 
     expect(first_html).to_have_text("This is a div with some inline styles.")
@@ -34,7 +40,7 @@ def test_html_in_line_styles(themed_app: Page, assert_snapshot: ImageCompareFunc
 def test_html_sanitization(themed_app: Page, assert_snapshot: ImageCompareFunction):
     """Test that html sanitizes script tags correctly."""
     html_elements = themed_app.get_by_test_id("stHtml")
-    expect(html_elements).to_have_count(6)
+    expect(html_elements).to_have_count(ST_HTML_ELEMENTS)
     second_html = html_elements.nth(1)
 
     expect(second_html).to_contain_text("This is a i tag")
@@ -46,7 +52,7 @@ def test_html_sanitization(themed_app: Page, assert_snapshot: ImageCompareFuncti
 def test_html_style_tags(themed_app: Page, assert_snapshot: ImageCompareFunction):
     """Test that html style tags are applied correctly."""
     html_elements = themed_app.get_by_test_id("stHtml")
-    expect(html_elements).to_have_count(6)
+    expect(html_elements).to_have_count(ST_HTML_ELEMENTS)
     third_html = html_elements.nth(2)
 
     expect(third_html).to_have_text("This text should be blue")
@@ -59,10 +65,13 @@ def test_html_style_tag_spacing(
 ):
     """Test that non-rendered html doesn't cause unnecessary spacing."""
     html_elements = themed_app.get_by_test_id("stHtml")
-    expect(html_elements).to_have_count(6)
+    expect(html_elements).to_have_count(ST_HTML_ELEMENTS)
 
     assert_snapshot(
-        themed_app.get_by_test_id("stVerticalBlock"), name="st_html-style_tag_spacing"
+        themed_app.get_by_test_id("stMainBlockContainer").get_by_test_id(
+            "stVerticalBlock"
+        ),
+        name="st_html-style_tag_spacing",
     )
 
 
@@ -74,12 +83,29 @@ def test_check_top_level_class(app: Page):
 def test_html_from_file_str(app: Page, assert_snapshot: ImageCompareFunction):
     """Test that we can load HTML files from str paths."""
     html_elements = app.get_by_test_id("stHtml")
-    expect(html_elements).to_have_count(6)
-    assert_snapshot(html_elements.nth(4), name="st_html-file_str")
+    expect(html_elements).to_have_count(ST_HTML_ELEMENTS)
+    assert_snapshot(html_elements.nth(3), name="st_html-file_str")
 
 
 def test_html_from_file_path(app: Page, assert_snapshot: ImageCompareFunction):
     """Test that we can load HTML files from Path objects."""
     html_elements = app.get_by_test_id("stHtml")
-    expect(html_elements).to_have_count(6)
-    assert_snapshot(html_elements.nth(5), name="st_html-file_path")
+    expect(html_elements).to_have_count(ST_HTML_ELEMENTS)
+    assert_snapshot(html_elements.nth(4), name="st_html-file_path")
+
+
+def test_html_rendered_in_correct_container(app: Page):
+    """Test that tags are rendered in the correct container."""
+    # Check the total number of stHtml elements
+    all_html_elements = app.get_by_test_id("stHtml")
+    expect(all_html_elements).to_have_count(ST_HTML_ELEMENTS)
+
+    # Check that the style tags are in the event container
+    event_container = app.get_by_test_id("stEvent")
+    style_html_elements = event_container.get_by_test_id("stHtml")
+    expect(style_html_elements).to_have_count(2)
+
+    # Check that the remaining 5 stHtml elements are in the main container
+    main_container = app.get_by_test_id("stMain")
+    other_html_elements = main_container.get_by_test_id("stHtml")
+    expect(other_html_elements).to_have_count(5)
